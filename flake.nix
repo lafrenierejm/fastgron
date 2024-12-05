@@ -2,15 +2,16 @@
   description = "High-performance JSON to GRON (greppable, flattened JSON) converter";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.05;
-    flake-parts.url = github:hercules-ci/flake-parts;
-    flake-root.url = github:srid/flake-root;
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-root.url = "github:srid/flake-root";
     pre-commit-hooks = {
-      url = github:cachix/pre-commit-hooks.nix;
+      url = "github:cachix/pre-commit-hooks.nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
     };
+    systems.url = "github:nix-systems/default";
   };
 
   outputs = inputs:
@@ -19,20 +20,30 @@
         flake-root.flakeModule
         pre-commit-hooks.flakeModule
       ];
-      systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
+      systems = import inputs.systems;
       perSystem = {
         config,
         self',
         inputs',
         pkgs,
+        self,
         system,
         ...
       }: let
-        nativeBuildInputs = with pkgs; [cmake clang];
-        buildInputs = with pkgs; [curl openssl zlib];
+        nativeBuildInputs = with pkgs; [
+          cmake
+          clang
+        ];
+        buildInputs = with pkgs; [
+          curl
+          openssl
+          zlib
+        ];
         fastgron = pkgs.stdenv.mkDerivation {
           pname = "fastgron";
-          version = "v0.6.4";
+          version = toString (
+            inputs.self.shortRev or inputs.self.dirtyShortRev or inputs.self.lastModified or "unknown"
+          );
           src = ./.;
           nativeBuildInputs = nativeBuildInputs;
           buildInputs = buildInputs;
@@ -53,7 +64,10 @@
         };
         fastgronWithFallback = pkgs.writeShellApplication {
           name = "fastgron-with-fallback";
-          runtimeInputs = [fastgron pkgs.mktemp];
+          runtimeInputs = [
+            fastgron
+            pkgs.mktemp
+          ];
           text = ''
             if [ ! "$#" -eq 1 ]; then
                 fastgron --help >&2 && exit 1
