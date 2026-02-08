@@ -268,7 +268,8 @@ options parse_options(int argc, char *argv[])
             opts.help = true;
             break; // No need to process further arguments
         }
-        else if (strcmp(argv[i], "--version") == 0 || strcmp(argv[i], "-V") == 0)
+        else if (strcmp(argv[i], "--version") == 0 ||
+                 strcmp(argv[i], "-V") == 0)
         {
             opts.version = true;
             break; // No need to process further arguments
@@ -278,7 +279,8 @@ options parse_options(int argc, char *argv[])
             print_simdjson_version();
             exit(EXIT_SUCCESS);
         }
-        else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--ignore-case") == 0)
+        else if (strcmp(argv[i], "-i") == 0 ||
+                 strcmp(argv[i], "--ignore-case") == 0)
         {
             flags |= IGNORE_CASE;
         }
@@ -286,7 +288,8 @@ options parse_options(int argc, char *argv[])
         {
             opts.ungron = true;
         }
-        else if (strcmp(argv[i], "-F") == 0 || strcmp(argv[i], "--fixed-string") == 0)
+        else if (strcmp(argv[i], "-F") == 0 ||
+                 strcmp(argv[i], "--fixed-string") == 0)
         {
             if (i + 1 >= argc)
             {
@@ -295,7 +298,8 @@ options parse_options(int argc, char *argv[])
             }
             filters.push_back(argv[++i]);
         }
-        else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--invert-match") == 0)
+        else if (strcmp(argv[i], "-v") == 0 ||
+                 strcmp(argv[i], "--invert-match") == 0)
         {
             flags |= INVERT_MATCH;
         }

@@ -239,7 +239,8 @@ void print_value_accessor(
             path, *objectAccessorsPtr, element, flags, filters
         );
     }
-    else if (std::holds_alternative<std::unique_ptr<AllAccessor>>(valueAccessor
+    else if (std::holds_alternative<std::unique_ptr<AllAccessor>>(
+                 valueAccessor
              ))
     {
         // Value accessor is an all accessor, handle it

@@ -73,12 +73,12 @@ struct ObjectAccessor
         ValueAccessor value_accessor
     )
         : key(key), new_key(new_key),
-          value_accessor(std::move(value_accessor)){};
+          value_accessor(std::move(value_accessor)) {};
 
     // move constructor
     inline ObjectAccessor(ObjectAccessor &&other) noexcept
         : key(std::move(other.key)), new_key(std::move(other.new_key)),
-          value_accessor(std::move(other.value_accessor)){
+          value_accessor(std::move(other.value_accessor)) {
 
           };
 

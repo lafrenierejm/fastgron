@@ -2,14 +2,12 @@
   description = "High-performance JSON to GRON (greppable, flattened JSON) converter";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.05;
-    flake-parts.url = github:hercules-ci/flake-parts;
-    flake-root.url = github:srid/flake-root;
-    pre-commit-hooks = {
-      url = github:cachix/pre-commit-hooks.nix;
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-root.url = "github:srid/flake-root";
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -17,11 +15,12 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = with inputs; [
         flake-root.flakeModule
-        pre-commit-hooks.flakeModule
+        git-hooks.flakeModule
       ];
       systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
       perSystem = {
         config,
+        self,
         self',
         inputs',
         pkgs,
@@ -32,7 +31,7 @@
         buildInputs = with pkgs; [curl openssl zlib];
         fastgron = pkgs.stdenv.mkDerivation {
           pname = "fastgron";
-          version = "v0.6.4";
+          version = inputs.self.shortRev or inputs.self.dirtyShortRev or inputs.self.lastModified or "development";
           src = ./.;
           nativeBuildInputs = nativeBuildInputs;
           buildInputs = buildInputs;
@@ -100,6 +99,7 @@
           inputsFrom = [config.pre-commit.devShell];
           buildInputs = buildInputs;
           nativeBuildInputs = nativeBuildInputs;
+          packages = config.pre-commit.settings.enabledPackages;
         };
       };
     };
