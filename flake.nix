@@ -20,6 +20,7 @@
       systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
       perSystem = {
         config,
+        self,
         self',
         inputs',
         pkgs,
@@ -30,7 +31,7 @@
         buildInputs = with pkgs; [curl openssl zlib];
         fastgron = pkgs.stdenv.mkDerivation {
           pname = "fastgron";
-          version = "v0.6.4";
+          version = inputs.self.shortRev or inputs.self.dirtyShortRev or inputs.self.lastModified or "development";
           src = ./.;
           nativeBuildInputs = nativeBuildInputs;
           buildInputs = buildInputs;
