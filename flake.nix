@@ -99,6 +99,7 @@
           inputsFrom = [config.pre-commit.devShell];
           buildInputs = buildInputs;
           nativeBuildInputs = nativeBuildInputs;
+          packages = config.pre-commit.settings.enabledPackages;
         };
       };
     };

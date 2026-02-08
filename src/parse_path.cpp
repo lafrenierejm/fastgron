@@ -145,8 +145,9 @@ class Parser
                 ObjectAccessors objectAccessors;
                 string key = parseJSONString();
                 expect(']');
-                objectAccessors.object_accessors.emplace_back(ObjectAccessor{
-                    key, nullopt, parseValueAccessor()});
+                objectAccessors.object_accessors.emplace_back(
+                    ObjectAccessor{key, nullopt, parseValueAccessor()}
+                );
                 return std::make_unique<ObjectAccessors>(
                     std::move(objectAccessors)
                 );
@@ -160,7 +161,8 @@ class Parser
         {
             ObjectAccessors objectAccessors = parseObjectAccessors();
             expect('}');
-            return std::make_unique<ObjectAccessors>(std::move(objectAccessors)
+            return std::make_unique<ObjectAccessors>(
+                std::move(objectAccessors)
             );
         }
         else if (match('.'))
@@ -208,7 +210,8 @@ class Parser
                 );
             }
         }
-        else if (index_ == input_.length() || input_[index_] == ',' || input_[index_] == '}')
+        else if (index_ == input_.length() || input_[index_] == ',' ||
+                 input_[index_] == '}')
         {
             return std::monostate{};
         }
@@ -374,10 +377,12 @@ void debug_print_path(ValueAccessor &valueAccessor)
             *std::get<std::unique_ptr<ObjectAccessors>>(valueAccessor)
         );
     }
-    else if (std::holds_alternative<std::unique_ptr<AllAccessor>>(valueAccessor
+    else if (std::holds_alternative<std::unique_ptr<AllAccessor>>(
+                 valueAccessor
              ))
     {
-        debug_print_path(*std::get<std::unique_ptr<AllAccessor>>(valueAccessor)
+        debug_print_path(
+            *std::get<std::unique_ptr<AllAccessor>>(valueAccessor)
         );
     }
 }

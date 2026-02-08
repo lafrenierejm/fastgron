@@ -116,8 +116,8 @@ void parse_gron(
     else if (line[0] == '=' || (line[0] == ' ' && line[1] == '='))
     {
         size_t start = 1;
-        while (start < line.size() && (line[start] == ' ' || line[start] == '=')
-        )
+        while (start < line.size() &&
+               (line[start] == ' ' || line[start] == '='))
         {
             start++;
         }
